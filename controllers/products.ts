@@ -1,32 +1,10 @@
 import { Client } from "https://deno.land/x/postgres/mod.ts";
-import { v4 } from "https://deno.land/std/uuid/mod.ts";
 
 import { Product } from "../types.ts";
 import { dbCreds } from "../config.ts";
 
 // Init Client
 const client = new Client(dbCreds);
-
-let products: Product[] = [
-  {
-    id: "1",
-    name: "Product One",
-    description: "This is product one",
-    price: 29.99,
-  },
-  {
-    id: "2",
-    name: "Product Two",
-    description: "This is product two",
-    price: 39.99,
-  },
-  {
-    id: "3",
-    name: "Product Three",
-    description: "This is product three",
-    price: 59.99,
-  },
-];
 
 // @desc    Get all products
 // @route   GET /api/v1/products
