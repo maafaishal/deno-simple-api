@@ -1,10 +1,4 @@
-import { Client } from "https://deno.land/x/postgres/mod.ts";
-
-import { Product } from "../types.ts";
-import { dbCreds } from "../config.ts";
-
-// Init Client
-const client = new Client(dbCreds);
+import { client } from "../config.ts";
 
 // @desc    Get all products
 // @route   GET /api/v1/products
@@ -148,12 +142,11 @@ export const updateProduct = async ({
     const body = await request.body();
     const product = await body.value;
 
-    await getProduct({ params: { id: params.id }, response })
+    await getProduct({ params: { id: params.id }, response });
 
-    console.log('response.status', response.status)
+    console.log("response.status", response.status);
 
     if (response.status !== 404) {
-
       await client.connect();
 
       const resultUpdate = await client.query(
@@ -164,7 +157,7 @@ export const updateProduct = async ({
         params.id
       );
 
-      console.log('resultUpdate', resultUpdate)
+      console.log("resultUpdate", resultUpdate);
 
       response.statue = 201;
       response.body = {
@@ -172,7 +165,7 @@ export const updateProduct = async ({
         data: product,
       };
     } else {
-      throw new Error()
+      throw new Error();
     }
   } catch (e) {
     response.status = 400;
@@ -198,12 +191,11 @@ export const deleteProduct = async ({
     const body = await request.body();
     const product = await body.value;
 
-    await getProduct({ params: { id: params.id }, response })
+    await getProduct({ params: { id: params.id }, response });
 
-    console.log('response.status', response.status)
+    console.log("response.status", response.status);
 
     if (response.status !== 404) {
-
       await client.connect();
 
       const resultUpdate = await client.query(
@@ -211,7 +203,7 @@ export const deleteProduct = async ({
         params.id
       );
 
-      console.log('resultUpdate', resultUpdate)
+      console.log("resultUpdate", resultUpdate);
 
       response.statue = 201;
       response.body = {
@@ -219,7 +211,7 @@ export const deleteProduct = async ({
         data: `Product with id ${params.id} has been deleted`,
       };
     } else {
-      throw new Error()
+      throw new Error();
     }
   } catch (e) {
     response.status = 400;
