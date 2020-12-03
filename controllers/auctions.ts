@@ -44,12 +44,16 @@ export const getAllAuctions = async ({
     );
     const count = Number(dataCount.rows[0][0]);
 
+    await client.end();
+
     response.body = {
       success: true,
       data: auctionsTemp,
       hasNext: count - page * PER_PAGE > 0,
     };
   } catch (e) {
+    await client.end();
+
     response.status = 400;
     response.body = {
       success: false,
@@ -83,11 +87,15 @@ export const getAuction = async ({
     );
     const auctionsTemp = mapResponse(result);
 
+    await client.end();
+
     response.body = {
       success: true,
       data: auctionsTemp[0] || null,
     };
   } catch (e) {
+    await client.end();
+    
     response.status = 400;
     response.body = {
       success: false,
