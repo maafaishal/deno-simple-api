@@ -5,7 +5,7 @@ import { dbCreds } from "../config.ts";
 
 import { AUCTION_STATUS_REJECTED_ID } from "../constants/index.ts";
 
-import sqlDataToArray from "../helpers/sqlDataToArray.ts";
+import mapResponse from "../helpers/mapResponse.ts";
 import sanitizeFormData from "../helpers/sanitizeFormData.ts";
 
 // Init Client
@@ -46,7 +46,7 @@ export const getReasons = async ({
     console.log("hallo");
 
     let reasonsData = "";
-    const data = sqlDataToArray(result);
+    const data = mapResponse(result);
 
     console.log("data", data);
 
@@ -138,7 +138,7 @@ export const reviewAuction = async ({
     };
   } catch (e) {
     await client.end();
-    
+
     response.status = 400;
     response.body = {
       success: false,
