@@ -1,6 +1,5 @@
 import { Client } from "https://deno.land/x/postgres/mod.ts";
 
-import { Product } from "../types.ts";
 import { dbCreds } from "../config.ts";
 
 // Init Client
