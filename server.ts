@@ -1,10 +1,16 @@
 import { Application } from "https://deno.land/x/oak/mod.ts";
+import { oakCors } from "https://deno.land/x/cors/mod.ts";
 import router from "./routes.ts";
 
 const PORT = Deno.env.get("PORT") || 7700;
 
 const app = new Application();
 
+app.use(
+  oakCors({
+    origin: /^.+tokopedia.com:[0-9]{4}/,
+  }),
+);
 app.use(router.routes());
 app.use(router.allowedMethods());
 
