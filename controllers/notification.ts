@@ -147,7 +147,6 @@ export const showNotif = async ({
   response: any;
 }) => {
   try {
-    await client.connect();
 
     const formData: any = (await multiParser(request.serverRequest)) || {};
     const fieldsData = formData.fields || {};
@@ -159,6 +158,8 @@ export const showNotif = async ({
         title,
         message: detail,
       });
+    } else {
+      throw new Error('Data is not completed')
     }
 
     response.body = {
