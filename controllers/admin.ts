@@ -24,7 +24,7 @@ export const getReasons = async ({
   try {
     await client.connect();
     
-    console.log('reason')
+    console.log('reason oyyyy')
 
     const auctionId = Number(params.auction_id || 0);
 
