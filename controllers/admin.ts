@@ -79,7 +79,8 @@ export const reviewAuction = async ({
       sanitizeFormData(fieldsData.auction_id || "") || 0
     );
     const status = Number(sanitizeFormData(fieldsData.status || "") || 0);
-    const reasons = sanitizeFormData(fieldsData.reasons || "");
+    const isReject = status === AUCTION_STATUS_REJECTED_ID;
+    const reasons = isReject ? sanitizeFormData(fieldsData.reasons || "") : "";
 
     if (!auctionId && auctionId !== 0) {
       throw new Error("There is no auction_id");
@@ -88,8 +89,6 @@ export const reviewAuction = async ({
     if (!status) {
       throw new Error("There is no status");
     }
-
-    const isReject = status === AUCTION_STATUS_REJECTED_ID;
 
     if (isReject && !reasons) {
       throw new Error("There are no reasons");
