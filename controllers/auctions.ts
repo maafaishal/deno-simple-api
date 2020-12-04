@@ -14,12 +14,12 @@ export const getAllAuctions = async ({
   response: any;
 }) => {
   try {
+    await client.connect();
+
     const requestURL = request.url;
     const userId = requestURL.searchParams.get("user_id");
     let page = Number(requestURL.searchParams.get("page"));
     const userType = requestURL.searchParams.get("type");
-
-    await client.connect();
 
     let additional = "";
 
@@ -73,14 +73,14 @@ export const getAuction = async ({
   response: any;
 }) => {
   try {
+    await client.connect();
+
     const id = request.url.searchParams.get("id");
     if (!id) {
       throw new Error("Auction id is required");
     } else if (isNaN(Number(id))) {
       throw new Error("Auction id is not valid");
     }
-
-    await client.connect();
 
     const result = await client.query(
       `SELECT * FROM auctions WHERE auction_id = ${id}`
@@ -125,29 +125,30 @@ export const addAuction = async ({
     };
   } else {
     try {
+      await client.connect();
+
       const data = value.data;
       if (!Array.isArray(data)) {
         throw new Error("Data must be array in JSON");
       }
 
-      await client.connect();
-
       for(let i = 0;i < data.length;i++) {
         const auction = data[i];
-        const result = await client.query(
-          "INSERT INTO auctions(user_id, product_name, product_description, product_image, multiple, initial_price, final_price, duration, highest_bid, status, created_date, updated_date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)",
+        await client.query(
+          "INSERT INTO auctions(user_id, shop_name, product_name, product_description, product_images, multiple, initial_price, final_price, duration, start_date, end_date, created_date, updated_date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)",
           auction.user_id,
+          auction.shop_name,
           auction.product_name,
           auction.product_description,
-          auction.product_image,
+          auction.product_images,
           auction.multiple,
           auction.initial_price,
           auction.final_price,
           auction.duration,
-          0,
-          1,
+          auction.start_date,
+          auction.end_date,
           new Date(),
-          new Date()
+          new Date(),
         );
       }
 
