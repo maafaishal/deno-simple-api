@@ -23,6 +23,8 @@ export const getReasons = async ({
 }) => {
   try {
     await client.connect();
+    
+    console.log('reason')
 
     const auctionId = Number(params.auction_id || 0);
 
