@@ -2,7 +2,11 @@ import { multiParser } from "https://deno.land/x/multiparser/mod.ts";
 
 import { client } from "../config.ts";
 
-import { AUCTION_STATUS_REJECTED_ID } from "../constants/index.ts";
+import {
+  AUCTION_STATUS_REJECTED_ID,
+  NOTIF_SUCCESS,
+  NOTIF_ERROR,
+} from "../constants/index.ts";
 
 import mapResponse from "../helpers/mapResponse.ts";
 import sanitizeFormData from "../helpers/sanitizeFormData.ts";
@@ -18,29 +22,21 @@ export const getReasons = async ({
   params: { auction_id: string };
 }) => {
   try {
+    await client.connect();
+
     const auctionId = Number(params.auction_id || 0);
 
     if (!auctionId && auctionId !== 0) {
       throw new Error("There is no auction_id");
     }
 
-    console.log("hallo!!!!!", auctionId);
-
-    await client.connect();
-
-    console.log("hallo :)", auctionId);
-
     const result = await client.query(
       "SELECT * FROM auctions WHERE auction_id=$1",
       auctionId
     );
 
-    console.log("hallo");
-
     let reasonsData = "";
     const data = mapResponse(result);
-
-    console.log("data", data);
 
     if (data.length > 0) {
       const reason = data?.[0]?.reasons;
@@ -75,6 +71,8 @@ export const reviewAuction = async ({
   response: any;
 }) => {
   try {
+    await client.connect();
+
     const formData: any = (await multiParser(request.serverRequest)) || {};
     const fieldsData = formData.fields || {};
     const auctionId = Number(
@@ -82,10 +80,6 @@ export const reviewAuction = async ({
     );
     const status = Number(sanitizeFormData(fieldsData.status || "") || 0);
     const reasons = sanitizeFormData(fieldsData.reasons || "");
-
-    console.log("fieldsData", fieldsData);
-    console.log("auctionId", sanitizeFormData(fieldsData.auction_id || ""));
-    console.log("status", status);
 
     if (!auctionId && auctionId !== 0) {
       throw new Error("There is no auction_id");
@@ -101,11 +95,9 @@ export const reviewAuction = async ({
       throw new Error("There are no reasons");
     }
 
-    await client.connect();
-
     const auction =
       (await client.query(
-        "SELECT auction_id FROM auctions WHERE auction_id=$1",
+        "SELECT user_id, product_name FROM auctions WHERE auction_id=$1",
         auctionId
       )) || {};
 
@@ -120,7 +112,29 @@ export const reviewAuction = async ({
       auctionId
     );
 
-    console.log("resultUpdate", resultUpdate);
+    const auctionData = auction?.rows?.[0] || [];
+    const userId = auctionData[0] || 0;
+    const productName = auctionData[1] || "";
+
+    let title = "Produkmu berhasil disetujui";
+    let detail = `Produk "${productName}" berhasil masuk ke pelelangan. Segera pantau produkmu disini.`;
+    let type = NOTIF_SUCCESS;
+
+    if (isReject) {
+      title = "Produkmu gagal masuk pelelangan";
+      detail = `Produk "${productName}" tidak dapat masuk ke pelelangan dikarenakan beberapa hal. <a href="/list" rel="noreferrer noopener" target="_blank">Cek di sini</a>`;
+      type = NOTIF_ERROR;
+    }
+
+    // send notificationz
+    await client.query(
+      "INSERT INTO notification(title, detail, user_id, type, created_date) VALUES($1,$2,$3,$4,$5)",
+      title,
+      detail,
+      userId,
+      type,
+      new Date()
+    );
 
     await client.end();
 

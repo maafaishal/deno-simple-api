@@ -16,6 +16,8 @@ export const getTotalNotif = async ({
   request: any;
 }) => {
   try {
+    await client.connect();
+
     const formData: any = (await multiParser(request.serverRequest)) || {};
     const fieldsData = formData.fields || {};
     const userId = Number(sanitizeFormData(fieldsData.user_id || "") || 0);
@@ -23,8 +25,6 @@ export const getTotalNotif = async ({
     if (!userId && userId !== 0) {
       throw new Error("There is no user_id");
     }
-
-    await client.connect();
 
     const result = await client.query(
       "SELECT COUNT(notification_id) FROM notification WHERE user_id=$1 AND is_read=false",
@@ -62,6 +62,8 @@ export const getNotif = async ({
   request: any;
 }) => {
   try {
+    await client.connect();
+
     const formData: any = (await multiParser(request.serverRequest)) || {};
     const fieldsData = formData.fields || {};
     const userId = Number(sanitizeFormData(fieldsData.user_id || "") || 0);
@@ -69,8 +71,6 @@ export const getNotif = async ({
     if (!userId && userId !== 0) {
       throw new Error("There is no user_id");
     }
-
-    await client.connect();
 
     const result = await client.query(
       "SELECT * FROM notification WHERE user_id=$1",
@@ -105,6 +105,8 @@ export const readNotif = async ({
   request: any;
 }) => {
   try {
+    await client.connect();
+
     const formData: any = (await multiParser(request.serverRequest)) || {};
     const fieldsData = formData.fields || {};
     const userId = Number(sanitizeFormData(fieldsData.user_id || "") || 0);
@@ -113,14 +115,10 @@ export const readNotif = async ({
       throw new Error("There is no user_id");
     }
 
-    await client.connect();
-
     const result = await client.query(
       "UPDATE notification SET is_read=true WHERE user_id=$1 AND is_read=false",
       userId
     );
-
-    console.log("result", result);
 
     await client.end();
 
