@@ -24,7 +24,7 @@ export const getAllAuctions = async ({
     let additional = "";
 
     if (userType === "seller") {
-      additional = `WHERE user_id = ${userId}`;
+      additional = `WHERE user_id = ${userId} AND NOT status IN (4,5);`;
     } else if (userType === "buyer") {
       additional = `WHERE status = 3`;
     }
