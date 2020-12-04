@@ -21,10 +21,10 @@ export const getAllAuctions = async ({
     let page = Number(requestURL.searchParams.get("page"));
     const userType = requestURL.searchParams.get("type");
 
-    let additional = "WHERE NOT status IN (4,5);";
+    let additional = "WHERE NOT status IN (4,5)";
 
     if (userType === "seller") {
-      additional = `WHERE user_id = ${userId} AND NOT status IN (4,5);`;
+      additional = `WHERE user_id = ${userId} AND NOT status IN (4,5)`;
     } else if (userType === "buyer") {
       additional = `WHERE status = 3`;
     }
