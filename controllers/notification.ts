@@ -167,6 +167,9 @@ export const showNotif = async ({
       errorMessage: "",
     };
   } catch (e) {
+
+    console.log('error', e)
+
     response.status = 400;
     response.body = {
       success: false,
