@@ -19,7 +19,7 @@ const dbCreds = {
   user: "fajarmac_deno",
   database: "fajarmac_auction",
   password: "hackathon12345",
-  hostname: "139.162.52.11",
+  hostname: "fajarma.com",
   port: 5432,
 };
 
