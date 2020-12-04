@@ -18,9 +18,8 @@ export const getTotalNotif = async ({
   try {
     await client.connect();
 
-    const formData: any = (await multiParser(request.serverRequest)) || {};
-    const fieldsData = formData.fields || {};
-    const userId = Number(sanitizeFormData(fieldsData.user_id || "") || 0);
+    const requestURL = request.url;
+    const userId = requestURL.searchParams.get("user_id");
 
     if (!userId && userId !== 0) {
       throw new Error("There is no user_id");
@@ -64,9 +63,8 @@ export const getNotif = async ({
   try {
     await client.connect();
 
-    const formData: any = (await multiParser(request.serverRequest)) || {};
-    const fieldsData = formData.fields || {};
-    const userId = Number(sanitizeFormData(fieldsData.user_id || "") || 0);
+    const requestURL = request.url;
+    const userId = requestURL.searchParams.get("user_id");
 
     if (!userId && userId !== 0) {
       throw new Error("There is no user_id");
