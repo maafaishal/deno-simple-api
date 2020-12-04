@@ -115,7 +115,7 @@ export const addAuction = async ({
   response: any;
 }) => {
   const body = await request.body();
-  const value = await body.value;
+  const value = await body.value.read();
 
   if (!request.hasBody) {
     response.status = 400;
@@ -127,7 +127,7 @@ export const addAuction = async ({
     try {
       await client.connect();
 
-      const data = value.data;
+      const data = JSON.parse(value.fields.data);
       if (!Array.isArray(data)) {
         throw new Error("Data must be array in JSON");
       }
