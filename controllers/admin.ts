@@ -55,6 +55,10 @@ export const getReasons = async ({
       data: reasonsData,
     };
   } catch (e) {
+
+    console.log('error cuy', e)
+    console.log('error cuy msg', e.message)
+
     response.status = 400;
     response.body = {
       errorMessage: e.message || "No data",
