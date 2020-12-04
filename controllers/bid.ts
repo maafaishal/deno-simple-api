@@ -12,7 +12,7 @@ export const getHistoryBids = async ({ request, response }: { request: any, resp
     const requestURL = request.url;
     const auctionId = requestURL.searchParams.get('id');
     if(!auctionId) {
-      throw new Error("auction_id is required");
+      throw new Error("auction id is required");
     }
 
     const result = await client.query(`SELECT * FROM bidding_history WHERE auction_id = $1 ORDER BY bid DESC`, auctionId);

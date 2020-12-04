@@ -135,7 +135,7 @@ export const addAuction = async ({
       for(let i = 0;i < data.length;i++) {
         const auction = data[i];
         await client.query(
-          "INSERT INTO auctions(user_id, shop_name, product_name, product_description, product_images, multiple, initial_price, final_price, duration, start_date, end_date, created_date, updated_date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)",
+          "INSERT INTO auctions(user_id, shop_name, product_name, product_description, product_images, multiple, initial_price, final_price, start_date, end_date, highest_bid, created_date, updated_date) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)",
           auction.user_id,
           auction.shop_name,
           auction.product_name,
@@ -144,9 +144,9 @@ export const addAuction = async ({
           auction.multiple,
           auction.initial_price,
           auction.final_price,
-          auction.duration,
           auction.start_date,
           auction.end_date,
+          auction.initial_price,
           new Date(),
           new Date(),
         );
@@ -190,18 +190,20 @@ export const editAuction = async ({
       await client.connect();
 
       const data = value.fields;
-      const result = await client.query(`
+      await client.query(`
         UPDATE auctions
         SET multiple = $1,
             initial_price = $2,
             final_price = $3,
-            duration = $4,
-            updated_date = $5
-        WHERE auction_id = $6`,
+            start_date = $4,
+            end_date = $5,
+            updated_date = $6
+        WHERE auction_id = $7`,
         data.multiple,
         data.initial_price,
         data.final_price,
-        data.duration,
+        data.start_date,
+        data.end_date,
         new Date(),
         data.auction_id,
       );
@@ -244,7 +246,7 @@ export const deleteAuction = async ({
       await client.connect();
 
       const data = value.fields;
-      const result = await client.query(`
+      await client.query(`
         DELETE FROM auctions
         WHERE auction_id = $1 AND user_id = $2`,
         data.auction_id,
