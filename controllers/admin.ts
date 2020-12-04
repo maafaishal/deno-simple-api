@@ -21,6 +21,8 @@ export const getReasons = async ({
   response: any;
   params: { auction_id: string };
 }) => {
+  console.log('get reasons')
+
   try {
     await client.connect();
     
