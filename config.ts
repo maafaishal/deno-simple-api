@@ -7,11 +7,19 @@ import { Client } from "https://deno.land/x/postgres/mod.ts";
 //   "postgres://pifbqfzzeokxen:9a821e98c76b3e5e5411d2924094bb2313b9cf58b03cd85820687bfd9d592836@ec2-54-235-158-17.compute-1.amazonaws.com:5432/d4amg6rg6ei84n"
 // );
 
+// const dbCreds = {
+//   user: "postgres",
+//   database: "deno_auction",
+//   password: "1234",
+//   hostname: "localhost",
+//   port: 5432,
+// };
+
 const dbCreds = {
-  user: "postgres",
-  database: "deno_auction",
-  password: "1234",
-  hostname: "localhost",
+  user: "fajarmac_deno",
+  database: "fajarmac_auction",
+  password: "hackathon12345",
+  hostname: "139.162.52.11",
   port: 5432,
 };
 

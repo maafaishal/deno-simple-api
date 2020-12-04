@@ -9,3 +9,7 @@ export const AUCTION_STATUS_APPROVED = "Approved"
 
 export const AUCTION_STATUS_DELETED_ID = 4;
 export const AUCTION_STATUS_DELETED = "Deleted"
+
+export const NOTIF_SUCCESS = 'success'
+export const NOTIF_ERROR = 'error'
+export const NOTIF_INFO = 'info'
