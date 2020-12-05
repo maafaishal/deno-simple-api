@@ -72,7 +72,7 @@ export const getNotif = async ({
     }
 
     const result = await client.query(
-      "SELECT * FROM notification WHERE user_id=$1 DESC",
+      "SELECT * FROM notification WHERE user_id=$1 ORDER BY notification_id DESC",
       userId
     );
 
