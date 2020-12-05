@@ -7,9 +7,7 @@ const PORT = Deno.env.get("PORT") || 7700;
 const app = new Application();
 
 app.use(
-  oakCors({
-    origin: /^.+tokopedia.com:[0-9]{4}/,
-  }),
+  oakCors(),
 );
 app.use(router.routes());
 app.use(router.allowedMethods());
