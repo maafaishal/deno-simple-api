@@ -1,3 +1,5 @@
+import { format } from "https://deno.land/std@0.79.0/datetime/mod.ts";
+
 import { client } from "../config.ts";
 import mapResponse from "../helpers/mapResponse.ts";
 
@@ -26,7 +28,8 @@ export const getAllAuctions = async ({
     if (userType === "seller") {
       additional = `WHERE user_id = ${userId} AND NOT status IN (4,5)`;
     } else if (userType === "buyer") {
-      additional = `WHERE status = 3`;
+      const now = format(new Date(), 'yyyy-MM-dd HH:mm:ss')
+      additional = `WHERE status = 3 AND start_date <= '${now}'`;
     }
 
     if (!page || isNaN(page)) {
